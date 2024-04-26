@@ -1,0 +1,35 @@
+From d777a13146541a338041d5572f742ab9dfc222ae Mon Sep 17 00:00:00 2001
+From: squid_ro <squid_ro@accton.com>
+Date: Wed, 21 Feb 2024 13:39:12 +0800
+Subject: [PATCH 2/2] Enable WITH_EBPF.
+
+---
+ Dockerfile | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/Dockerfile b/Dockerfile
+index bb5f9915..ea07dd6f 100644
+--- a/Dockerfile
++++ b/Dockerfile
+@@ -1,7 +1,7 @@
+ FROM ubuntu:20.04 as builder
+ ARG DEBIAN_FRONTEND=noninteractive
+ RUN apt-get -y update \
+-    && apt-get -y install build-essential git npm openvswitch-common libpcap0.8 libpcap0.8-dev libxml2-dev protobuf-compiler libprotobuf-dev libvirt-dev curl wget\
++    && apt-get -y install build-essential git npm openvswitch-common libpcap0.8 libpcap0.8-dev libxml2-dev protobuf-compiler libprotobuf-dev libvirt-dev curl llvm clang wget\
+     && rm -rf /var/lib/apt/lists/*
+ 
+ ARG GO_VERSION=go1.15.15.linux-amd64.tar.gz
+@@ -12,6 +12,9 @@ ARG GOPATH=/go
+ RUN wget https://go.dev/dl/${GO_VERSION} && tar -C /usr/local/ -zxf ${GO_VERSION}
+ ARG PATH=$PATH:/usr/local/go/bin
+ ARG WITH_OVNK8S=true
++ARG WITH_EBPF_DOCKER_BUILDER=false
++ARG WITH_EBPF=true
++
+ RUN make build
+ 
+ FROM ubuntu:20.04 as skydive
+-- 
+2.25.1
+
